@@ -47,7 +47,7 @@ public abstract class Piece{
     public List<Move> getAllMoves(Board board) {
         List<Move> allMoves = new ArrayList();
         for (Coordinates coordinates : board.getAllCoordinates()){
-            if (isMoveAuthorized(board, coordinates)&&coordinates !=null){
+            if (isMoveAuthorized(board, coordinates) && coordinates !=null){
                 allMoves.add(new Move(board, this.getPosition(),coordinates));
             }
         }

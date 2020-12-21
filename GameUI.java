@@ -51,7 +51,6 @@ public class GameUI {
     }
     
     public boolean isMovePlayable(Move gameMove) {
-        // TODO: 23/11/2020 faire un cas pour chaque piece
 
         //la case origine est vide de base
         if(board.isEmptyCell(gameMove.origin)){
@@ -85,13 +84,11 @@ public class GameUI {
             }
         }
         if(gameMove.origin.getY()== gameMove.destination.getY()){
-
             if (!board.sameRowNothingBetween(gameMove.origin,gameMove.destination)) {
                 return false;
             }
         }
         if(Math.abs(gameMove.origin.getX() - gameMove.destination.getX()) == Math.abs(gameMove.origin.getY() - gameMove.destination.getY())){
-
             if (!board.sameDiagonalNothingBetween(gameMove.origin,gameMove.destination)) {
                 return false;
             }
@@ -142,7 +139,6 @@ public class GameUI {
         return true;
     }
     public void applyMove(Move move){
-        System.out.println(move.origin);
         Piece piece = board.getPiece(move.origin);
         //il faut quil mette le changement de priece dans le array
         history.push(move);
@@ -179,7 +175,7 @@ public class GameUI {
         // recuperer toute les mouvement de sont opposant
         //si jamais le mouvement a pour destination la piece prey alors true
         for (Move move : getOpponent(prey.owner).getAllMoves(board)){
-            if (move.destination.equals(prey.getPosition())){
+            if (move.destination.equals(prey.getPosition())&& isMovePlayable(move)){
                 return true;
             }
         }
@@ -191,38 +187,42 @@ public class GameUI {
     }
 
     public boolean isCheckMate(Player player){
-        if(isCheck(player)){
-            //on regarde si en bougant une piece il sort du check
-            List<Move> allmoves = player.getAllMoves(board);
-            for (Move move : allmoves){
+
+        //on regarde si en bougant une piece il sort du check
+        List<Move> allmoves = player.getAllMoves(board);
+        switchPlayer();
+        for (Move move : allmoves){
+            if (isMovePlayable(move)){
                 applyMove(move);
                 if (!isCheck(player)){
                     undo();
-
+                    switchPlayer();
                     return false;
                 }
                 undo();
             }
-            return true;
         }
+        switchPlayer();
+        return true;
         //sur la base d'un joueur qui est en echec
         // voir sur tout les mouvment que le joueur est en echec peut faire
         //si aucun mouvement enleve l'echec (faire le mouvement puis undo)
         //sinon echec et mate
         //get all move(), is check()
-        return false;
     }
     
     public void determineWinner(int hit){
         if (white.getScore() > black.getScore() && hit==50){
             System.out.println("la partie est fini, les "+ white.getColor()+ " on gagné avec un scode de "+ white.getScore()+ " contre "+ black.getScore());
         }
-        else System.out.println("la partie est fini, les "+ black.getColor()+ " on gagné avec un scode de "+ black.getScore()+ " contre "+ white.getScore());
+        if (white.getScore() < black.getScore() && hit==50) {
+            System.out.println("la partie est fini, les " + black.getColor() + " on gagné avec un scode de " + black.getScore() + " contre " + white.getScore());
+        }
         if (black.isCheckMate){
-            System.out.println("FIN DE LA PARTIE :\n les " + white.getColor()+ "on gagné par echec et mat");
+            System.out.println("FIN DE LA PARTIE :\n les " + white.getColor()+ " on gagné par echec et mat");
         }
         if (white.isCheckMate){
-            System.out.println("FIN DE LA PARTIE :\n les " + black.getColor()+ "on gagné par echec et mat");
+            System.out.println("FIN DE LA PARTIE :\n les " + black.getColor()+ " on gagné par echec et mat");
         }
     }
     
@@ -232,6 +232,8 @@ public class GameUI {
             Move move = new Move(board,currentPlayer.getFromTo());
             if(!isMovePlayable(move)) continue;
             applyMove(move);
+            //todo ne pas pouvoir bouger une piece qui nous met echec
+
             numberOfHits ++;
             //mettre le joueur adverse en check et tester directement si il est check mate
             if(isCheck(getOpponent(currentPlayer))){
@@ -240,12 +242,18 @@ public class GameUI {
                     determineWinner(numberOfHits);
                     break;
                 }
-                switchPlayer();
                 getOpponent(currentPlayer).setCheck();
                 System.out.println(getOpponent(currentPlayer).getColor()+" is check !!!");
             }
             switchPlayer();
+            if (isPrey(getOpponent(currentPlayer).getKing())){
+                undo();
+                System.out.println("Mouvement impossible sinon prise du roi");
+            }
         }
-        determineWinner(numberOfHits);
+        if (numberOfHits == 50){
+            determineWinner(numberOfHits);
+        }
+
     }
 }
