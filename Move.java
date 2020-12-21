@@ -5,24 +5,24 @@ public class Move{
     final Piece pieceAtDestination;
     
     public Move(Board board, Coordinates origin, Coordinates destination){
-	this.origin = null;
-	this.destination = null;
-	this.pieceAtOrigin = null;
-	this.pieceAtDestination = null;
+	this.origin = origin;
+	this.destination = destination;
+	this.pieceAtOrigin = board.getPiece(origin);
+	this.pieceAtDestination = board.getPiece(destination);
     }
     
     public Move(Coordinates origin, Coordinates destination, Piece pieceAtOrigin, Piece pieceAtDestination){
-	this.origin = null;
-	this.destination = null;
-	this.pieceAtOrigin = null;
-	this.pieceAtDestination = null;
+	this.origin = origin;
+	this.destination = destination;
+	this.pieceAtOrigin = pieceAtOrigin;
+	this.pieceAtDestination = pieceAtDestination;
     }
     
     public Move(Board board, FromTo ft){
-	this.origin = null;
-	this.destination = null;
-	this.pieceAtOrigin = null;
-	this.pieceAtDestination = null;
+	this.origin = ft.getFrom();
+	this.destination = ft.getTo();
+	this.pieceAtOrigin = board.getPiece(ft.getFrom());
+	this.pieceAtDestination = board.getPiece(ft.getTo());
     }
 }
     

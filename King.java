@@ -6,15 +6,15 @@ public class King extends Piece {
     }
 
     public boolean isMoveAuthorized(Board board, Coordinates destination){
-	int dx = destination.getX();
-	int dy = destination.getY();
-	int ox = this.getX();
-	int oy = this.getY();
+		int dx = destination.getX();
+		int dy = destination.getY();
+		int ox = this.getX();
+		int oy = this.getY();
 
-
-
-	return true;
-    }
+		int deltaX = ox - dx;
+		int deltaY = oy - dy;
+		return Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1;
+	}
 
     @Override
     public Type getType() {

@@ -3,22 +3,28 @@ public class Coordinates{
     private int y;
     
     public Coordinates(int x, int y){
+        this.x = x;
+        this.y = y;
     }
 
     public int getX(){
-	return 0;
+	return x;
     }
     public int getY(){
-	return 0;
+	return y;
     }
 
     @Override
     public String toString(){
-	return "";
+	return "(" + x + "," + y +")";
     }
 
     @Override
     public boolean equals(Object o) {
-	return true;
+        if (o == this){
+            return true;
+        }
+        Coordinates coordinates = (Coordinates) o;
+        return coordinates.getX() == this.getX() && coordinates.getY() == this.getY();
     }
 }
