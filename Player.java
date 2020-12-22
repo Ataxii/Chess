@@ -33,7 +33,7 @@ public abstract class Player{
         score = score - value;
     }
     
-    public abstract FromTo getFromTo();
+    public abstract FromTo getFromTo(GameUI ui);
 
     public Piece getKing(){
 	return king;

@@ -7,7 +7,7 @@ public class Human extends Player{
     }
 
     @Override
-    public FromTo getFromTo() {
+    public FromTo getFromTo(GameUI gui) {
         return ui.waitForPlayerMove();
     }
     

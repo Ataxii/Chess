@@ -15,10 +15,16 @@ public class Pawn extends Piece{
 
         int deltaX = ox - dx;
         int deltaY = oy - dy;
-        if (Math.abs(deltaY)==1){
+        if (Math.abs(deltaY)==1 && Math.abs(deltaX)==1){
             return true;
         }
-        return Math.abs(deltaY) == 2 && deltaX == 0;
+        if (Math.abs(deltaY)==1 && Math.abs(deltaX) == 0){
+            return true;
+        }
+        if (Math.abs(deltaY) == 2 && deltaX == 0) {
+            return true;
+        }
+        return false;
     }
 
     @Override
